@@ -1,0 +1,47 @@
+package actionComment;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+//추가
+import dbc.*;
+import tdl_Comment.*;
+
+public class WriteProAction implements CommandAction {
+
+	@Override
+	public String requestPro(HttpServletRequest request, HttpServletResponse response) throws Throwable {
+		// TODO Auto-generated method stub
+	System.out.println("actionComment WriteProAction 시작!");
+		//한글처리	
+		request.setCharacterEncoding("utf-8");
+		int TP_num=Integer.parseInt(request.getParameter("TP_num"));
+
+		String TP_id=request.getParameter("TP_id");
+		String TU_id=request.getParameter("TU_id");
+		TDLCommentDTO articleC=new TDLCommentDTO();	
+		 
+		System.out.println("TPC_num 받아오는 값 -> "+request.getParameter("TP_num"));
+		int TPC_ref=1,TPC_step=0,TPC_level=0;//writePro.jsp
+		articleC.setTPC_id(request.getParameter("TU_id"));
+		articleC.setTPC_num(Integer.parseInt(request.getParameter("TP_num")));
+		articleC.setTPC_ref(TPC_ref);
+		articleC.setTPC_step(TPC_step);
+		articleC.setTPC_level(TPC_level);
+		articleC.setTPC_content(request.getParameter("TPC_content"));
+		System.out.println("중간점검 "); 
+		System.out.println("TPC_num => "+articleC.getTPC_num());
+		System.out.println("TPC_ref => "+articleC.getTPC_ref());
+		System.out.println("TPC_step => "+articleC.getTPC_step());
+		System.out.println("TPC_level => "+articleC.getTPC_level());
+
+		
+		TDLCommentDAO dbPro=new TDLCommentDAO();
+		dbPro.insertArticle(articleC);  // tdl_Comment 의 insertArticle 호출
+		//response.sendRedirect("http://localhost:8090/JspBoard2/list.do");
+		request.setAttribute("TP_num",TP_num);
+		request.setAttribute("TP_id",TP_id);
+		request.setAttribute("TU_id",TU_id);
+		return "/index/TDL_POST/content.do"; // "/index.jsp"
+	}
+
+}
